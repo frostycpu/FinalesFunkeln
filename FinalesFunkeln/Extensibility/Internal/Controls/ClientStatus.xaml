@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="FinalesFunkeln.Extensibility.Internal.Controls.ClientStatus"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <RadialGradientBrush  x:Key="RedBrush" GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+            <RadialGradientBrush.GradientStops>
+                <GradientStop Color="Red" Offset="0" />
+                <GradientStop Color="Red" Offset="0.4" />
+                <GradientStop Color="{StaticResource ButtonBackgroundColor}" Offset="1.0" />
+            </RadialGradientBrush.GradientStops>
+        </RadialGradientBrush>
+        <RadialGradientBrush  x:Key="YellowBrush" GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+            <RadialGradientBrush.GradientStops>
+                <GradientStop Color="Yellow" Offset="0" />
+                <GradientStop Color="Yellow" Offset="0.4" />
+                <GradientStop Color="{StaticResource ButtonBackgroundColor}" Offset="1.0" />
+            </RadialGradientBrush.GradientStops>
+        </RadialGradientBrush>
+        <RadialGradientBrush  x:Key="GreenBrush" GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+            <RadialGradientBrush.GradientStops>
+                <GradientStop Color="Lime" Offset="0" />
+                <GradientStop Color="Lime" Offset="0.4" />
+                <GradientStop Color="{StaticResource ButtonBackgroundColor}" Offset="1.0" />
+            </RadialGradientBrush.GradientStops>
+        </RadialGradientBrush>
+    </UserControl.Resources>
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <WrapPanel Orientation="Horizontal" Margin="3">
+            <Rectangle x:Name="StatusIcon" Width="80" Height="80" HorizontalAlignment="Center"/>
+
+            <Label VerticalAlignment="Center" Margin="2,0,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="StatusText" Margin="5" Text="" FontSize="26"/>
+                </StackPanel>
+            </Label>
+        </WrapPanel>
+        <TextBlock x:Name="InfoText" Grid.Row="1" Margin="5,3,5,3" TextAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow"/>
+
+    </Grid>
+</UserControl>

@@ -1,0 +1,271 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4516F4A5-7594-402C-B0D8-2DD6F80EC8EA}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FinalesFunkeln</RootNamespace>
+    <AssemblyName>FinalesFunkeln</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'POE|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\AirDebug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;AIRDEBUG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AvalonDock.Themes.VS2012">
+      <HintPath>..\lib\AvalonDock.Themes.VS2012.dll</HintPath>
+    </Reference>
+    <Reference Include="CBF">
+      <HintPath>..\lib\CBF.dll</HintPath>
+    </Reference>
+    <Reference Include="rtmp-sharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\rtmp-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Controls\Attributes\HiddenAttribute.cs" />
+    <Compile Include="Controls\DocumentViewControl.cs" />
+    <Compile Include="Controls\ExtensionMenuItem.cs" />
+    <Compile Include="Extensibility\Events\AsyncMessageEventArgs.cs" />
+    <Compile Include="Extensibility\Events\RemoteProcedureCallResponseEventArgs.cs" />
+    <Compile Include="Extensibility\Events\RemoteProcedureCallEventArgs.cs" />
+    <Compile Include="Extensibility\Events\ViewRegisteredEventArgs.cs" />
+    <Compile Include="Extensibility\IExtension.cs" />
+    <Compile Include="Extensibility\ExtensionManager.cs" />
+    <Compile Include="Extensibility\ExtensionVersion.cs" />
+    <Compile Include="Extensibility\Internal\Controls\AcknowledgeListItem.cs" />
+    <Compile Include="Extensibility\Internal\Controls\AsyncListItem.cs" />
+    <Compile Include="Extensibility\Internal\Controls\CertificateList.xaml.cs">
+      <DependentUpon>CertificateList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Extensibility\Internal\Controls\CertListItem.cs" />
+    <Compile Include="Extensibility\Internal\Controls\ErrorListItem.cs" />
+    <Compile Include="Extensibility\Internal\Controls\ClientStatus.xaml.cs">
+      <DependentUpon>ClientStatus.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Extensibility\Internal\Controls\ExtensionsList.xaml.cs">
+      <DependentUpon>ExtensionsList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Extensibility\Internal\Controls\PacketListItem.cs" />
+    <Compile Include="Extensibility\Internal\Controls\PacketTreeViewItem.cs" />
+    <Compile Include="Extensibility\Internal\Controls\PropertyObjectTreeViewItem.cs" />
+    <Compile Include="Extensibility\Internal\Controls\PropertyValueTreeViewItem.cs" />
+    <Compile Include="Extensibility\Internal\Controls\RootTreeViewItem.cs" />
+    <Compile Include="Extensibility\Internal\FinalesFunkelnExtension.cs" />
+    <Compile Include="Extensibility\Internal\Controls\PacketOverviewUi.xaml.cs">
+      <DependentUpon>PacketOverviewUi.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Extensibility\Internal\IInternalExtension.cs" />
+    <Compile Include="Extensibility\UiManager.cs" />
+    <Compile Include="Extensibility\Ui\View.cs" />
+    <Compile Include="Extensibility\Ui\WindowInfo.cs" />
+    <Compile Include="IO\PropertiesFile.cs" />
+    <Compile Include="IO\RiotSerializationContext.cs" />
+    <Compile Include="Lol\LolClient.cs" />
+    <Compile Include="Lol\LolClientGameData.cs" />
+    <Compile Include="Lol\LolClientImages.cs" />
+    <Compile Include="Lol\LolConnection.cs" />
+    <Compile Include="Lol\SQLite\ChampionData.cs" />
+    <Compile Include="IO\LolProxy.cs" />
+    <Compile Include="RiotObjects\LcdsServiceProxyResponse.cs" />
+    <Compile Include="RiotObjects\BroadcastNotification.cs" />
+    <Compile Include="RiotObjects\ClientDynamicConfigurationNotification.cs" />
+    <Compile Include="RiotObjects\ClientSystemStatesNotification.cs" />
+    <Compile Include="RiotObjects\ExternalizableJsonObject.cs" />
+    <Compile Include="SQLiteNet\SQLite.cs" />
+    <Compile Include="SQLiteNet\SQLiteAsync.cs" />
+    <Compile Include="Util\ProcessHelper.cs" />
+    <Compile Include="Util\Wow.cs" />
+    <Page Include="Extensibility\Internal\Controls\CertificateList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Extensibility\Internal\Controls\ClientStatus.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Extensibility\Internal\Controls\ExtensionsList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Extensibility\Internal\Controls\PacketOverviewUi.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="StyleResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Util\ProcessInjector.cs" />
+    <Compile Include="Util\ProcessMemory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="data\certs\prod.br.lol.riotgames.com.p12" />
+    <None Include="data\certs\prod.eu.lol.riotgames.com.p12" />
+    <None Include="data\certs\prod.eun1.lol.riotgames.com.p12" />
+    <None Include="data\certs\prod.euw1.lol.riotgames.com.p12" />
+    <None Include="data\certs\prod.lol.garenanow.com.p12" />
+    <None Include="data\certs\prod.na1.lol.riotgames.com.p12" />
+    <None Include="data\certs\prod.na2.lol.riotgames.com.p12" />
+    <None Include="data\certs\prod.oc1.lol.riotgames.com.p12" />
+    <None Include="data\certs\prod.pbe1.lol.riotgames.com.p12" />
+    <None Include="data\certs\prod.tr.lol.riotgames.com.p12" />
+    <None Include="data\certs\prodph.lol.garenanow.com.p12" />
+    <None Include="data\certs\prodth.lol.garenanow.com.p12" />
+    <None Include="data\certs\prodtw.lol.garenanow.com.p12" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <EmbeddedResource Include="Resources\Config\Layout.cbf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Ack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Async.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Err.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\CertAdded.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\CertNotAdded.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\lolimg\summonerspells\0.png" />
+    <None Include="data\lolimg\summonerspells\1.png" />
+    <None Include="data\lolimg\summonerspells\10.png" />
+    <None Include="data\lolimg\summonerspells\11.png" />
+    <None Include="data\lolimg\summonerspells\12.png" />
+    <None Include="data\lolimg\summonerspells\13.png" />
+    <None Include="data\lolimg\summonerspells\14.png" />
+    <None Include="data\lolimg\summonerspells\16.png" />
+    <None Include="data\lolimg\summonerspells\17.png" />
+    <None Include="data\lolimg\summonerspells\2.png" />
+    <None Include="data\lolimg\summonerspells\20.png" />
+    <None Include="data\lolimg\summonerspells\21.png" />
+    <None Include="data\lolimg\summonerspells\3.png" />
+    <None Include="data\lolimg\summonerspells\30.png" />
+    <None Include="data\lolimg\summonerspells\31.png" />
+    <None Include="data\lolimg\summonerspells\32.png" />
+    <None Include="data\lolimg\summonerspells\4.png" />
+    <None Include="data\lolimg\summonerspells\6.png" />
+    <None Include="data\lolimg\summonerspells\7.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

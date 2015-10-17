@@ -1,0 +1,48 @@
+﻿<Window x:Class="FinalesFunkeln.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:theme="clr-namespace:AvalonDock.Themes;assembly=AvalonDock.Themes.VS2012"
+        xmlns:extensibility="clr-namespace:FinalesFunkeln.Extensibility"
+        xmlns:controls="clr-namespace:FinalesFunkeln.Controls"
+        xmlns:ui="clr-namespace:FinalesFunkeln.Extensibility.Ui"
+        Title="Finales Funkeln" Height="1024" Width="1280" 
+        Initialized="Window_Initialized" 
+        Loaded="MainWindow_OnLoaded"
+        Closing="Window_Closing" 
+        FontFamily="Consolas" 
+        Icon="Resources/Images/icon.png">
+    <DockPanel LastChildFill="True">
+        <Menu DockPanel.Dock="Top" IsMainMenu="True">
+            <MenuItem x:Name="ViewsMenuItem" Header="Views">
+                <MenuItem.ItemContainerStyle>
+                    <Style TargetType="MenuItem">
+                        <Setter Property="ItemsSource" Value="{Binding Views}"/>
+                        <Setter Property="HeaderTemplate">
+                            <Setter.Value>
+                                <DataTemplate DataType="controls:ExtensionMenuItem">
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="ItemTemplate">
+                            <Setter.Value>
+                                <DataTemplate DataType="ui:View">
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="ItemContainerStyle" Value="{x:Null}"/>
+                        <EventSetter Event="Click" Handler="ViewMenuItem_Click"/>
+                    </Style>
+                </MenuItem.ItemContainerStyle>
+            </MenuItem>
+        </Menu>
+        <xcad:DockingManager x:Name="DockingManager" AllowMixedOrientation="True">
+            <xcad:LayoutRoot/>
+            <xcad:DockingManager.Theme>
+                <theme:VS2012DarkTheme/>
+            </xcad:DockingManager.Theme>
+        </xcad:DockingManager>
+    </DockPanel>
+</Window>
