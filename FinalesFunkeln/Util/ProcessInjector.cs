@@ -45,6 +45,8 @@ namespace FinalesFunkeln.Util
         public event EventHandler<Process> ProcessExited;
 
 		bool _isInjected;
+
+        EventWaitHandle _waitHandle;
         public bool IsInjected
         {
             get { return _isInjected; }
@@ -63,6 +65,7 @@ namespace FinalesFunkeln.Util
         {
             ProcessName = process;
             CheckThread = new Thread(CheckLoop) { IsBackground = true };
+            _waitHandle = new AutoResetEvent(false);
         }
 
         public void Start()
@@ -79,23 +82,20 @@ namespace FinalesFunkeln.Util
         {
             while (CheckThread != null)
             {
-                if (CurrentProcess == null || CurrentProcess.HasExited)
+                IsInjected = false;
+                CurrentProcess = Process.GetProcessesByName(ProcessName).FirstOrDefault();
+                if (CurrentProcess != null)
                 {
-                    IsInjected = false;
-                    CurrentProcess = Process.GetProcessesByName(ProcessName).FirstOrDefault();
-                    if (CurrentProcess != null)
-                    {
-                        if (ProcessFound != null)
-                            ProcessFound(this, CurrentProcess);
+                    if (ProcessFound != null)
+                        ProcessFound(this, CurrentProcess);
 
-                        CurrentProcess.WaitForExit();
+                    CurrentProcess.WaitForExit();
 
-                        if (ProcessExited != null)
-                            ProcessExited(this, CurrentProcess);
-                    }
+                    if (ProcessExited != null)
+                        ProcessExited(this, CurrentProcess);
                 }
                 else
-                    Thread.Sleep(1000);
+                    Task.Delay(100).Wait();
             }
         }
 
