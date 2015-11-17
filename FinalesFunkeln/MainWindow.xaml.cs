@@ -193,16 +193,25 @@ namespace FinalesFunkeln
             //sometimes it takes a while for the main module to be loaded...
             while (e.MainWindowHandle == IntPtr.Zero)
                 Thread.Sleep(1000);
-#if AIRDEBUG && DEBUG
             string loldir = null;
-            string wmiQuery = string.Format("select CommandLine from Win32_Process where Name='{0}'", "adl.exe");
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher(wmiQuery);
-            ManagementObjectCollection retObjectCollection = searcher.Get();
-            foreach (ManagementObject retObject in retObjectCollection)
-                loldir = ProcessHelper.SplitCommandLineArgs((string)retObject["CommandLine"])[2];
+            try
+            {
+#if AIRDEBUG && DEBUG
+                string wmiQuery = string.Format("select CommandLine from Win32_Process where Name='{0}'", "adl.exe");
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(wmiQuery);
+                ManagementObjectCollection retObjectCollection = searcher.Get();
+                foreach (ManagementObject retObject in retObjectCollection)
+                    loldir = ProcessHelper.SplitCommandLineArgs((string)retObject["CommandLine"])[2];
 #else
-            var loldir = Path.GetDirectoryName(e.MainModule.FileName)??string.Empty;
+                loldir = Path.GetDirectoryName(e.MainModule.FileName) ?? string.Empty;
 #endif
+            }
+            catch (Win32Exception)
+            {
+                MessageBox.Show("Cannot access the lolclient process. If this error persists try runnig as an administrator.","Error");
+                return;
+
+            }
             _lolProperties = new PropertiesFile(Path.Combine(loldir, LolPropertiesFilename));
             var host = _lolProperties["host"];
             _rtmpAddress = host.Contains(",") ? host.Substring(0, host.IndexOf(',')) : host;
