@@ -48,6 +48,9 @@
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AvalonDock.Themes.VS2012">
       <HintPath>..\lib\AvalonDock.Themes.VS2012.dll</HintPath>
@@ -261,7 +264,11 @@
     <None Include="data\lolimg\summonerspells\7.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /s /i /y "$(ProjectDir)data" "$(TargetDir)data"
+xcopy /i /y "$(SolutionDir)lib\sqlite3.dll" "$(TargetDir)*"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
