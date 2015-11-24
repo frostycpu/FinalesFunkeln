@@ -35,6 +35,7 @@ namespace FinalesFunkeln
         readonly RiotSerializationContext _serializationContext = RiotSerializationContext.Instance;
 
         const string ExtensionsDir = "extensions/";
+        const string ExtensionsDependenciesDir = "extdependencies/";
         const string ConfigDir = "config/";
         const string InternalConfigDir = "config/internal/";
         const string LayoutConfigFilename = "Layout.cbf";
@@ -78,6 +79,8 @@ namespace FinalesFunkeln
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             _uiManager = new UiManager();
 
+            LoadExtensionDependencies();
+
             List<Assembly> assemblies = LoadExtensions();
             _extensionManager = new ExtensionManager(_uiManager, Dispatcher, ConfigDir, new FinalesFunkelnExtension());
             _extensionManager.AddAssemblies(assemblies);
@@ -110,6 +113,24 @@ namespace FinalesFunkeln
             _processInjector.ProcessExited += _processInjector_ProcessExited;
             _processInjector.Start();
 
+        }
+
+        private void LoadExtensionDependencies()
+        {
+            if (!Directory.Exists(ExtensionsDependenciesDir))
+                Directory.CreateDirectory(ExtensionsDependenciesDir);
+            
+            foreach (var file in Directory.GetFiles(ExtensionsDependenciesDir, "*.dll"))
+            {
+                try
+                {
+                    Assembly.LoadFrom(file);
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            }
         }
 
         private void _processInjector_ProcessExited(object sender, Process e)
