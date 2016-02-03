@@ -1,4 +1,4 @@
-﻿namespace FinalesFunkeln.Extensibility.Internal.Controls
+﻿namespace FinalesFunkeln.Controls
 {
     class PropertyValueTreeViewItem : PacketTreeViewItem
     {

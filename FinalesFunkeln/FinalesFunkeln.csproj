@@ -92,6 +92,9 @@
     <Compile Include="Controls\Attributes\HiddenAttribute.cs" />
     <Compile Include="Controls\DocumentViewControl.cs" />
     <Compile Include="Controls\ExtensionMenuItem.cs" />
+    <Compile Include="Controls\ObjectTree.xaml.cs">
+      <DependentUpon>ObjectTree.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Extensibility\Events\AsyncMessageEventArgs.cs" />
     <Compile Include="Extensibility\Events\RemoteProcedureCallResponseEventArgs.cs" />
     <Compile Include="Extensibility\Events\RemoteProcedureCallEventArgs.cs" />
@@ -113,10 +116,10 @@
       <DependentUpon>ExtensionsList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensibility\Internal\Controls\PacketListItem.cs" />
-    <Compile Include="Extensibility\Internal\Controls\PacketTreeViewItem.cs" />
-    <Compile Include="Extensibility\Internal\Controls\PropertyObjectTreeViewItem.cs" />
-    <Compile Include="Extensibility\Internal\Controls\PropertyValueTreeViewItem.cs" />
-    <Compile Include="Extensibility\Internal\Controls\RootTreeViewItem.cs" />
+    <Compile Include="Controls\PacketTreeViewItem.cs" />
+    <Compile Include="Controls\PropertyObjectTreeViewItem.cs" />
+    <Compile Include="Controls\PropertyValueTreeViewItem.cs" />
+    <Compile Include="Controls\RootTreeViewItem.cs" />
     <Compile Include="Extensibility\Internal\FinalesFunkelnExtension.cs" />
     <Compile Include="Extensibility\Internal\Controls\PacketOverviewUi.xaml.cs">
       <DependentUpon>PacketOverviewUi.xaml</DependentUpon>
@@ -142,6 +145,10 @@
     <Compile Include="SQLiteNet\SQLiteAsync.cs" />
     <Compile Include="Util\ProcessHelper.cs" />
     <Compile Include="Util\Wow.cs" />
+    <Page Include="Controls\ObjectTree.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Extensibility\Internal\Controls\CertificateList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

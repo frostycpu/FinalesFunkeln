@@ -4,62 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:FinalesFunkeln.Extensibility.Internal.Controls"
+             xmlns:controls2="clr-namespace:FinalesFunkeln.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <ContextMenu x:Key="PropValueContextMenu" DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
-            <MenuItem Header="Copy full name" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}" InputGestureText="Ctrl+C">
-                <MenuItem.Style>
-                    <Style TargetType="MenuItem">
-                        <EventSetter Event="Click" Handler="CopyPropPath_Click"/>
-                    </Style>
-                </MenuItem.Style>
-            </MenuItem>
-            <MenuItem Header="Copy full name and value" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}" InputGestureText="Ctrl+Shift+C">
-                <MenuItem.Style>
-                    <Style TargetType="MenuItem">
-                        <EventSetter Event="Click" Handler="CopyProp_Click"/>
-                    </Style>
-                </MenuItem.Style>
-            </MenuItem>
-            <MenuItem Header="Copy name" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}">
-                <MenuItem.Style>
-                    <Style TargetType="MenuItem">
-                        <EventSetter Event="Click" Handler="CopyPropName_Click"/>
-                    </Style>
-                </MenuItem.Style>
-            </MenuItem>
-            <MenuItem Header="Copy value" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}">
-                <MenuItem.Style>
-                    <Style TargetType="MenuItem">
-                        <EventSetter Event="Click" Handler="CopyPropValue_Click"/>
-                    </Style>
-                </MenuItem.Style>
-            </MenuItem>
-        </ContextMenu>
-        <ContextMenu x:Key="PropObjectContextMenu" DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
-            <MenuItem Header="Copy name" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}">
-                <MenuItem.Style>
-                    <Style TargetType="MenuItem">
-                        <EventSetter Event="Click" Handler="CopyPropName_Click"/>
-                    </Style>
-                </MenuItem.Style>
-            </MenuItem>
-            <MenuItem Header="Copy full name" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}" InputGestureText="Ctrl+C">
-                <MenuItem.Style>
-                    <Style TargetType="MenuItem">
-                        <EventSetter Event="Click" Handler="CopyPropPath_Click"/>
-                    </Style>
-                </MenuItem.Style>
-            </MenuItem>
-            <MenuItem Header="Copy class name" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}" InputGestureText="Ctrl+Shift+C">
-                <MenuItem.Style>
-                    <Style TargetType="MenuItem">
-                        <EventSetter Event="Click" Handler="CopyClassName_Click"/>
-                    </Style>
-                </MenuItem.Style>
-            </MenuItem>
-        </ContextMenu>
         <ContextMenu x:Key="PacketListContextMenu">
             <MenuItem Header="Clear" Click="ClearPacketList_Click"/>
         </ContextMenu>
@@ -94,41 +42,6 @@
                 </DataTemplate>
             </ListBox.Resources>
         </ListBox>
-        <TreeView x:Name="ObjectTreeView" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <TreeView.ItemContainerStyle>
-                <Style TargetType="TreeViewItem">
-                    <Setter Property="IsExpanded" Value="True"/>
-                </Style>
-            </TreeView.ItemContainerStyle>
-            <TreeView.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type controls:PropertyValueTreeViewItem}" ItemsSource="{Binding Items}">
-                    <HierarchicalDataTemplate.ItemContainerStyle>
-                        <Style TargetType="{x:Type TreeViewItem}">
-                            <Setter Property="IsExpanded" Value="{Binding IsNodeExpanded}"/>
-                            <EventSetter Event="KeyDown" Handler="TreeViewItem_KeyDown"/>
-                        </Style>
-                    </HierarchicalDataTemplate.ItemContainerStyle>
-                    <TextBlock Text="{Binding Header}" ContextMenu="{StaticResource PropValueContextMenu}"/>
-                </HierarchicalDataTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type controls:PropertyObjectTreeViewItem}" ItemsSource="{Binding Items}">
-                    <HierarchicalDataTemplate.ItemContainerStyle>
-                        <Style TargetType="{x:Type TreeViewItem}">
-                            <Setter Property="IsExpanded" Value="{Binding IsNodeExpanded}"/>
-                            <EventSetter Event="KeyDown" Handler="TreeViewItem_KeyDown"/>
-                        </Style>
-                    </HierarchicalDataTemplate.ItemContainerStyle>
-                    <TextBlock Text="{Binding Header}" ContextMenu="{StaticResource PropObjectContextMenu}"/>
-                </HierarchicalDataTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type controls:RootTreeViewItem}" ItemsSource="{Binding Items}">
-                    <HierarchicalDataTemplate.ItemContainerStyle>
-                        <Style TargetType="{x:Type TreeViewItem}">
-                            <Setter Property="IsExpanded" Value="{Binding IsNodeExpanded}"/>
-                            <EventSetter Event="KeyDown" Handler="TreeViewItem_KeyDown"/>
-                        </Style>
-                    </HierarchicalDataTemplate.ItemContainerStyle>
-                    <TextBlock Text="{Binding Header}" />
-                </HierarchicalDataTemplate>
-            </TreeView.Resources>
-        </TreeView>
+        <controls2:ObjectTree Grid.Column="2" x:Name="ObjectTree"/>
     </Grid>
 </UserControl>

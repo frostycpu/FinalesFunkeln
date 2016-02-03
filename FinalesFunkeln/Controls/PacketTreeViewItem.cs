@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace FinalesFunkeln.Extensibility.Internal.Controls
+namespace FinalesFunkeln.Controls
 {
     abstract class PacketTreeViewItem:INotifyPropertyChanged
     {
