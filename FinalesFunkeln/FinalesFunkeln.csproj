@@ -215,6 +215,7 @@
     <None Include="data\certs\prodph.lol.garenanow.com.p12" />
     <None Include="data\certs\prodth.lol.garenanow.com.p12" />
     <None Include="data\certs\prodtw.lol.garenanow.com.p12" />
+    <None Include="data\highlighting\Javascript.xshd" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
