@@ -151,16 +151,11 @@ namespace CallLcds
                     case 3://Object
                         try
                         {
-                            var o = Serializer.Deserialize<object>(value);
+                            object o= Serializer.Deserialize<object>(value);
+
                             if (o is Dictionary<string, object>)
                             {
-                                var asobj = new AsObject();
-                                foreach (var el in o as Dictionary<string, object>)
-                                    if (el.Key == "TypeName")
-                                        asobj.TypeName = el.Value as string;
-                                    else
-                                        asobj[el.Key] = el.Value;
-                                args[i] = asobj;
+                                args[i] = ConvertToAsObject(o as Dictionary<string,object>);
                             }
                             else
                                 args[i] = o;
@@ -194,6 +189,17 @@ namespace CallLcds
                 StatusBlock.Foreground = Brushes.Orange;
                 StatusBlock.Text = $"The server returned an error!";
             }
+        }
+
+        AsObject ConvertToAsObject(Dictionary<string, object> dict)
+        {
+            var asobj = new AsObject();
+            foreach (var el in dict as Dictionary<string, object>)
+                if (el.Key == "TypeName")
+                    asobj.TypeName = el.Value as string;
+                else
+                    asobj[el.Key] = el.Value is Dictionary<string, object>? ConvertToAsObject(el.Value as Dictionary<string,object>):el.Value;
+            return asobj;
         }
 
         private StackPanel CreateDefaultArgControl(int index)
