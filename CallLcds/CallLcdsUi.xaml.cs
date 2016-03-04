@@ -190,7 +190,7 @@ namespace CallLcds
             }
             catch (InvocationException ex)
             {
-                ObjectTree.SetRoot("Invoke", new AsObject {["Destination"] = sname,["Operation"] = mname,["Arguments"] = args,["Error"] = ex });
+                ObjectTree.SetRoot("Invoke", new AsObject {["Destination"] = sname,["Operation"] = mname,["Arguments"] = args,["Error"] = ex.RootCause });
                 StatusBlock.Foreground = Brushes.Orange;
                 StatusBlock.Text = $"The server returned an error!";
             }
