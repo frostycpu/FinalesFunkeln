@@ -83,7 +83,8 @@ namespace FinalesFunkeln.Util
             while (CheckThread != null)
             {
                 IsInjected = false;
-                CurrentProcess = Process.GetProcessesByName(ProcessName).FirstOrDefault();
+                var processes = Process.GetProcessesByName(ProcessName);
+                CurrentProcess = processes.FirstOrDefault();
                 if (CurrentProcess != null)
                 {
                     if (ProcessFound != null)

@@ -104,6 +104,8 @@ namespace FinalesFunkeln
 
 #if AIRDEBUG && DEBUG
             _processInjector = new ProcessInjector("adl");//AirDebugLauncher
+#elif LCU
+            _processInjector = new ProcessInjector("LeagueClient");//New LoL client
 #else
             _processInjector = new ProcessInjector("lolclient");
 #endif
@@ -211,9 +213,11 @@ namespace FinalesFunkeln
             ProcessInjector pi = sender as ProcessInjector;
             if (pi == null) return;
 
+#if !LCU    //The new lol client has a separate process for the UI
             //sometimes it takes a while for the main module to be loaded...
             while (e.MainWindowHandle == IntPtr.Zero)
-                Thread.Sleep(1000);
+#endif
+            Thread.Sleep(1000);
             string loldir = null;
             try
             {
@@ -223,6 +227,9 @@ namespace FinalesFunkeln
                 ManagementObjectCollection retObjectCollection = searcher.Get();
                 foreach (ManagementObject retObject in retObjectCollection)
                     loldir = ProcessHelper.SplitCommandLineArgs((string)retObject["CommandLine"])[2];
+#elif LCU
+                loldir = Path.GetDirectoryName(e.MainModule.FileName) ?? string.Empty;
+                loldir = Path.Combine(loldir, @"../../../../lol_air_client/releases/0.0.4.53/deploy");
 #else
                 loldir = Path.GetDirectoryName(e.MainModule.FileName) ?? string.Empty;
 #endif
