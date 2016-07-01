@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using FinalesFunkeln.Controls.Attributes;
+using FinalesFunkeln.Util;
 using RtmpSharp.IO;
 using RtmpSharp.IO.AMF3;
 
@@ -16,13 +18,48 @@ namespace FinalesFunkeln.RiotObjects
     public class LcdsServiceProxyResponse:DynamicObject
     {
         [Hidden]
-        public string TypeName { get { return "com.riotgames.platform.serviceproxy.dispatch.LcdsServiceProxyResponse"; } }
+        public string TypeName => "com.riotgames.platform.serviceproxy.dispatch.LcdsServiceProxyResponse";
 
         private static readonly JavaScriptSerializer Serializer = new JavaScriptSerializer();
 
+
+        [Transient]
+        private string _payload;
+        [Transient]
+        private object _decompressedPayload;
+
         [Transient]
         // ReSharper disable once InconsistentNaming
-        public object payload { get; private set; }
+        public object payload => _decompressedPayload ?? (_decompressedPayload = Serializer.Deserialize<object>(CompressedPayload? Encoding.UTF8.GetString(Gzip.Decompress(Convert.FromBase64String(_payload))):_payload));
+
+        [Hidden]
+        [SerializedName("payload")]
+        public string Payload //'payload' has to be declared BEFORE 'compressedPayload' otherwise the client has trouble decoding the payload
+        {
+            get
+            {
+                if (_decompressedPayload == null)
+                    return _payload;
+                string pl;
+                try
+                {
+                    pl = Serializer.Serialize(_decompressedPayload);
+                }
+                catch (Exception)
+                {
+                    if (Debugger.IsAttached)
+                        Debugger.Break();
+                    pl = payload as string;
+                }
+                pl = CompressedPayload ? Convert.ToBase64String(Gzip.Compress(Encoding.UTF8.GetBytes(pl))).Replace("\\u0027", "'") : pl;
+                return pl;
+            }
+            set
+            {
+                _payload = value;
+                _decompressedPayload = null;
+            }
+        }
 
         [SerializedName("status")]
         public string Status { get; set; }
@@ -36,23 +73,12 @@ namespace FinalesFunkeln.RiotObjects
         [SerializedName("serviceName")]
         public string ServiceName { get; set; }
 
-        [Hidden]
-        [SerializedName("payload")]
-        public string Payload
-        {
-            get 
-            {
-                return payload == null ? null : Serializer.Serialize(payload);
-            }
-            set
-            {
-                payload = value == null ? null : Serializer.Deserialize<object>(value);
-            }
-        }
+        [SerializedName("compressedPayload")]
+        public bool CompressedPayload { get; set; }
 
         public override IEnumerable<string> GetDynamicMemberNames()
         {
-            return new[] { "payload", "status", "messageId", "methodName", "serviceName", "TypeName" };
+            return new[] { "payload", "status", "messageId", "methodName", "serviceName", "TypeName", "compressedPayload" };
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
@@ -77,6 +103,9 @@ namespace FinalesFunkeln.RiotObjects
                 case "TypeName":
                     result = TypeName;
                     break;
+                case "compressedPayload":
+                    result = CompressedPayload;
+                    break;
                 default:
                     result = null;
                     return false;
@@ -89,7 +118,7 @@ namespace FinalesFunkeln.RiotObjects
             switch (binder.Name)
             {
                 case "payload":
-                    payload = value;
+                    _decompressedPayload= value;
                     break;
                 case "status":
                     Status = value as string;
@@ -102,6 +131,9 @@ namespace FinalesFunkeln.RiotObjects
                     break;
                 case "serviceName":
                     ServiceName = value as string;
+                    break;
+                case "compressedPayload":
+                    CompressedPayload = (bool)value;
                     break;
                 default:
                     return false;

@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;AIRDEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -163,6 +163,7 @@
     <Compile Include="RiotObjects\ExternalizableJsonObject.cs" />
     <Compile Include="SQLiteNet\SQLite.cs" />
     <Compile Include="SQLiteNet\SQLiteAsync.cs" />
+    <Compile Include="Util\Gzip.cs" />
     <Compile Include="Util\ProcessHelper.cs" />
     <Compile Include="Util\Wow.cs" />
     <Page Include="Controls\ObjectTree.xaml">
