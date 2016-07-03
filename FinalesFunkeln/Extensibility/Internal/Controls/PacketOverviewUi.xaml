@@ -24,7 +24,7 @@
                 <Style TargetType="ListBoxItem"/>
                 <DataTemplate DataType="{x:Type controls:AcknowledgeListItem}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="pack://application:,,,/Resources/Images/Ack.png" />
+                        <Image Source="{Binding IconSource}" />
                         <TextBlock Text="{Binding Title}" />
                     </StackPanel>
                 </DataTemplate>
@@ -36,7 +36,7 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type controls:ErrorListItem}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="pack://application:,,,/Resources/Images/Err.png" />
+                        <Image Source="{Binding IconSource}" />
                         <TextBlock Text="{Binding Title}" />
                     </StackPanel>
                 </DataTemplate>

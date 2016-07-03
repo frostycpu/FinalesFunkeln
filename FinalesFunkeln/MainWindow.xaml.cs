@@ -229,7 +229,8 @@ namespace FinalesFunkeln
                     loldir = ProcessHelper.SplitCommandLineArgs((string)retObject["CommandLine"])[2];
 #elif LCU
                 loldir = Path.GetDirectoryName(e.MainModule.FileName) ?? string.Empty;
-                loldir = Path.Combine(loldir, @"../../../../lol_air_client/releases/0.0.4.53/deploy");
+                loldir = Path.Combine(loldir, @"../../../../lol_air_client/releases/0.0.4.129/deploy");
+                //TODO this directory is just a placeholder
 #else
                 loldir = Path.GetDirectoryName(e.MainModule.FileName) ?? string.Empty;
 #endif
@@ -269,7 +270,7 @@ namespace FinalesFunkeln
             }
 
             InitProxy();
-            _lolClient = new LolClient(loldir, _lolProperties, _proxy);
+            _lolClient = new LolClient(loldir, _lolProperties, _proxy,_extensionManager);
             _extensionManager.FireLolClientInjectedEvent(_lolClient);
             try
             {

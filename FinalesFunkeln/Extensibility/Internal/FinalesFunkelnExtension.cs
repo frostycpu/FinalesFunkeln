@@ -46,7 +46,7 @@ namespace FinalesFunkeln.Extensibility.Internal
 
         private void pm_ErrorMessageReceived(object sender, RemoteProcedureCallResponseEventArgs e)
         {
-            _dispatcher.InvokeAsync(() => _packetUi.PacketListBox.Items.Add(new ErrorListItem(e.Destination, e.Operation, e.Parameters, e.ResponseBody)));
+            _dispatcher.InvokeAsync(() => _packetUi.PacketListBox.Items.Add(new ErrorListItem(e.Destination, e.Operation, e.Parameters, e.ResponseBody,e.InvokedByProxy)));
         }
 
         private void pm_AsyncMessageReceived(object sender, AsyncMessageEventArgs e)
@@ -56,7 +56,7 @@ namespace FinalesFunkeln.Extensibility.Internal
 
         private void pm_AcknowledgeMessageReceived(object sender, RemoteProcedureCallResponseEventArgs e)
         {
-            _dispatcher.InvokeAsync(() => _packetUi.PacketListBox.Items.Add(new AcknowledgeListItem(e.Destination, e.Operation, e.Parameters, e.ResponseBody)));
+            _dispatcher.InvokeAsync(() => _packetUi.PacketListBox.Items.Add(new AcknowledgeListItem(e.Destination, e.Operation, e.Parameters, e.ResponseBody, e.InvokedByProxy)));
         }
 
         private void pm_LolClientClosed(object sender, EventArgs e)

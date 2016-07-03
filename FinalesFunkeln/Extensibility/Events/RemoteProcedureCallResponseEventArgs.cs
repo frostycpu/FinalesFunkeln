@@ -10,8 +10,8 @@ namespace FinalesFunkeln.Extensibility.Events
     {
         public dynamic ResponseBody;
 
-        public RemoteProcedureCallResponseEventArgs( string destination, string operation, dynamic[] parameters, dynamic responseBody)
-            : base(destination, operation, parameters)
+        public RemoteProcedureCallResponseEventArgs( string destination, string operation, dynamic[] parameters, dynamic responseBody, bool invokedByProxy=false)
+            : base(destination, operation, parameters,invokedByProxy)
         {
             ResponseBody = responseBody;
         }
