@@ -124,6 +124,7 @@
       <DependentUpon>CertificateList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensibility\Internal\Controls\CertListItem.cs" />
+    <Compile Include="Extensibility\Internal\Controls\CallResponseListItem.cs" />
     <Compile Include="Extensibility\Internal\Controls\ErrorListItem.cs" />
     <Compile Include="Extensibility\Internal\Controls\ClientStatus.xaml.cs">
       <DependentUpon>ClientStatus.xaml</DependentUpon>
