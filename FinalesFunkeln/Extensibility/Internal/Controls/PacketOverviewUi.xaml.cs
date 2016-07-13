@@ -38,7 +38,7 @@ namespace FinalesFunkeln.Extensibility.Internal.Controls
             else if (async != null)
                 ObjectTree.SetRoot("AsyncMessage", BuildAsync(async.Body));
             else if (err != null)
-                ObjectTree.SetRoot("Invoke", BuildError(err.ServiceName, err.Operation, err.InvokeArguments, err.Error));
+                ObjectTree.SetRoot("Invoke", BuildError(err.ServiceName, err.Operation, err.InvokeArguments, err.Response));
 
         }
         private AsObject BuildAck(string destination, string operation, object[] args, object response)
