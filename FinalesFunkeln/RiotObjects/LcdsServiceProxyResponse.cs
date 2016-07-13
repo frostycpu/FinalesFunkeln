@@ -56,7 +56,7 @@ namespace FinalesFunkeln.RiotObjects
             }
             set
             {
-                _payload = value;
+                _payload = value??"{}";
                 _decompressedPayload = null;
             }
         }
