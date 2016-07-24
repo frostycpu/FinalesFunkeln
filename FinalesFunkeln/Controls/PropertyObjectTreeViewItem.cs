@@ -7,10 +7,13 @@
         public override string Header { get { return Property + (string.IsNullOrEmpty(ClassName) ? "(<dynamic>)" : "(" + ClassName + ")"); } }
         public override bool IncludeInPathLookup { get { return _isPath; } }
 
-        public PropertyObjectTreeViewItem(PacketTreeViewItem parent, string property, string classname, bool includeInPathLookup):base(parent,property)
+        public object Element { get; }
+
+        public PropertyObjectTreeViewItem(PacketTreeViewItem parent, string property, string classname, object element, bool includeInPathLookup):base(parent,property)
         {
             ClassName = classname;
             _isPath = includeInPathLookup;
+            Element = element;
         }
     }
 }

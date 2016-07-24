@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +20,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using FinalesFunkeln.Controls.Attributes;
 using FinalesFunkeln.IO;
+using Microsoft.Win32;
+using Newtonsoft.Json;
 using RtmpSharp.IO;
 using RtmpSharp.IO.AMF3;
 
@@ -29,7 +32,7 @@ namespace FinalesFunkeln.Controls
         public ObjectTree()
         {
             InitializeComponent();
-            
+
         }
 
         public void SetRoot(string rootname, object obj)
@@ -88,7 +91,7 @@ namespace FinalesFunkeln.Controls
             else if (obj.GetType().IsArray)
             {
                 object[] arr = obj as object[];
-                tvi = new PropertyObjectTreeViewItem(parent, name, "Array" + '[' + arr.Length.ToString() + "]", isPath);
+                tvi = new PropertyObjectTreeViewItem(parent, name, "Array" + '[' + arr.Length.ToString() + "]", obj, isPath);
                 for (int i = 0; i < arr.Length; i++)
                 {
                     BuildObjectTree(tvi, arr[i], '[' + i.ToString() + ']');
@@ -97,7 +100,7 @@ namespace FinalesFunkeln.Controls
             else if (obj is ArrayCollection)
             {
                 ArrayCollection col = obj as ArrayCollection;
-                tvi = new PropertyObjectTreeViewItem(parent, name, "ArrayCollection" + '[' + col.Count.ToString() + "]", isPath);
+                tvi = new PropertyObjectTreeViewItem(parent, name, "ArrayCollection" + '[' + col.Count.ToString() + "]", obj, isPath);
                 for (int i = 0; i < col.Count; i++)
                 {
                     BuildObjectTree(tvi, col[i], '[' + i.ToString() + ']');
@@ -107,7 +110,7 @@ namespace FinalesFunkeln.Controls
             else if (obj is ArrayList)
             {
                 ArrayList col = obj as ArrayList;
-                tvi = new PropertyObjectTreeViewItem(parent, name, "Array" + '[' + col.Count.ToString() + "]", isPath);
+                tvi = new PropertyObjectTreeViewItem(parent, name, "Array" + '[' + col.Count.ToString() + "]", obj, isPath);
                 for (int i = 0; i < col.Count; i++)
                 {
                     BuildObjectTree(tvi, col[i], '[' + i.ToString() + ']');
@@ -119,11 +122,11 @@ namespace FinalesFunkeln.Controls
                 IDictionary<string, object> dict = obj as IDictionary<string, object>;
                 if (obj is AsObject)
                 {
-                    tvi = new PropertyObjectTreeViewItem(parent, name, (obj as AsObject).TypeName, isPath);
+                    tvi = new PropertyObjectTreeViewItem(parent, name, (obj as AsObject).TypeName, obj, isPath);
                 }
                 else
                 {
-                    tvi = new PropertyObjectTreeViewItem(parent, name, RiotSerializationContext.Instance.GetAlias(obj.GetType().GetGenericTypeDefinition().FullName), isPath);
+                    tvi = new PropertyObjectTreeViewItem(parent, name, RiotSerializationContext.Instance.GetAlias(obj.GetType().GetGenericTypeDefinition().FullName), obj, isPath);
                 }
                 foreach (var kv in dict)
                 {
@@ -141,13 +144,13 @@ namespace FinalesFunkeln.Controls
             else if (Attribute.IsDefined(obj.GetType(), typeof(SerializableAttribute)))
             {
                 PropertyInfo[] pis = obj.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
-                tvi = new PropertyObjectTreeViewItem(parent, name, RiotSerializationContext.Instance.GetAlias(obj.GetType().FullName), isPath);
+                tvi = new PropertyObjectTreeViewItem(parent, name, RiotSerializationContext.Instance.GetAlias(obj.GetType().FullName), obj, isPath);
                 foreach (var prop in pis)
                 {
                     if (prop.CanRead && prop.GetIndexParameters().Length == 0 && !Attribute.IsDefined(prop, typeof(HiddenAttribute)))
                     {
                         string pname = null;
-                        SerializedNameAttribute[] attributes = (SerializedNameAttribute[])prop.GetCustomAttributes(typeof(SerializedNameAttribute), false);
+                        SerializedNameAttribute[] attributes = (SerializedNameAttribute[]) prop.GetCustomAttributes(typeof(SerializedNameAttribute), false);
                         if (attributes.Length == 1)
                             pname = attributes[0].SerializedName;
                         else if (attributes.Length > 0)
@@ -168,8 +171,8 @@ namespace FinalesFunkeln.Controls
             }
             if (tvi != null)
             {
-                if(parent!=null)
-                parent.Items.Add(tvi);
+                if (parent != null)
+                    parent.Items.Add(tvi);
                 tvi.IsNodeExpanded = expand;
             }
             return tvi;
@@ -241,12 +244,21 @@ namespace FinalesFunkeln.Controls
 
         private void TreeViewItem_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.C || (Keyboard.Modifiers & ModifierKeys.Control) != ModifierKeys.Control) return;
+            if (e.Key != Key.C && e.Key != Key.E || (Keyboard.Modifiers & ModifierKeys.Control) != ModifierKeys.Control) return;
+            e.Handled = true;
             var tv = sender as TreeViewItem;
             if (tv == null || ObjectTreeView.SelectedItem != tv.DataContext) return;
             var pv = tv.DataContext as PropertyValueTreeViewItem;
-            Clipboard.SetText((Keyboard.Modifiers & ModifierKeys.Shift) != ModifierKeys.Shift ? (tv.DataContext as PacketTreeViewItem).GetPath() :
-                (pv != null) ? pv.GetPath() + " = " + pv.Value : (tv.DataContext as PropertyObjectTreeViewItem).ClassName);
+            switch (e.Key)
+            {
+                case Key.C:
+                    Clipboard.SetText((Keyboard.Modifiers & ModifierKeys.Shift) != ModifierKeys.Shift ? (tv.DataContext as PacketTreeViewItem).GetPath() :
+                        (pv != null) ? pv.GetPath() + " = " + pv.Value : (tv.DataContext as PropertyObjectTreeViewItem).ClassName);
+                    break;
+                case Key.E:
+                    ExportJson_Click(sender,null);
+                    break;
+            }
         }
 
         private void CopyClassName_Click(object sender, RoutedEventArgs e)
@@ -261,6 +273,33 @@ namespace FinalesFunkeln.Controls
             if (g == null) return;
             Clipboard.SetText(g.ClassName);
         }
-        
+
+        private void ExportJson_Click(object sender, RoutedEventArgs e)
+        {
+            var mi = sender as MenuItem;
+            var cm = mi?.CommandParameter as ContextMenu;
+            var element = cm?.PlacementTarget as FrameworkElement;
+            var g = element?.DataContext as PropertyObjectTreeViewItem ?? (sender as TreeViewItem)?.DataContext as PropertyObjectTreeViewItem;
+
+            if (g == null) return;
+            string json = JsonConvert.SerializeObject(g.Element, Formatting.Indented);
+
+            var fd = new SaveFileDialog();
+            fd.AddExtension = true;
+            fd.DefaultExt = ".json";
+            fd.Filter= "JSON file (.json)|*.json|Text file (.txt)|*.txt";
+            fd.InitialDirectory = Directory.GetCurrentDirectory();
+            fd.OverwritePrompt = true;
+
+            if (fd.ShowDialog() == true)
+            {
+                Stream str;
+                using (str = fd.OpenFile())
+                {
+                    byte[] b = Encoding.UTF8.GetBytes(json);
+                    str.Write(b, 0, b.Length);
+                }
+            }
+        }
     }
 }

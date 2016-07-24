@@ -60,6 +60,13 @@
                     </Style>
                 </MenuItem.Style>
             </MenuItem>
+            <MenuItem Header="Export JSON" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}" InputGestureText="Ctrl+E">
+                <MenuItem.Style>
+                    <Style TargetType="MenuItem">
+                        <EventSetter Event="Click" Handler="ExportJson_Click"/>
+                    </Style>
+                </MenuItem.Style>
+            </MenuItem>
         </ContextMenu>
     </UserControl.Resources>
     <Grid>
