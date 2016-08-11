@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -16,7 +17,7 @@ namespace FinalesFunkeln.Extensibility.Internal
     {
         public string Name => "FinalesFunkeln";
         public string InternalName => "frostycpu:FinalesFunkeln";
-        public ExtensionVersion Version => "1.0.0.0";
+        public ExtensionVersion Version => Assembly.GetExecutingAssembly().GetName().Version.ToString();
         public string Author => "frostycpu";
         public string Description => "The application itself.";
 

@@ -105,7 +105,7 @@ namespace FinalesFunkeln.Extensibility
                 try
                 {
                     p.Value.Init(this, _uiManager, _dispatcher);
-                    ConsoleWriteLine(string.Format("[{0}] Initialized",p.Value.Name));
+                    ConsoleWriteLine(string.Format("[{0}:{1}] Initialized",p.Value.Name,p.Value.Version));
                 }
                 catch (Exception ex)
                 {
