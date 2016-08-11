@@ -157,6 +157,10 @@ namespace CallLcds
                             {
                                 args[i] = ConvertToAsObject(o as Dictionary<string,object>);
                             }
+                            else if (o is Array)
+                            {
+                                HandleArray(o as object[]);
+                            }
                             else
                                 args[i] = o;
                         }
@@ -188,6 +192,15 @@ namespace CallLcds
                 ObjectTree.SetRoot("Invoke", new AsObject {["Destination"] = sname,["Operation"] = mname,["Arguments"] = args,["Error"] = ex.RootCause });
                 StatusBlock.Foreground = Brushes.Orange;
                 StatusBlock.Text = $"The server returned an error!";
+            }
+        }
+
+        private void HandleArray(object[] v)
+        {
+            for (int i=0;i<v.Length;i++)
+            {
+                if (v[i] is Dictionary<string, object>)
+                    v[i] = ConvertToAsObject(v[i] as Dictionary<string, object>);
             }
         }
 

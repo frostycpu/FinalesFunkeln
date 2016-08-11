@@ -22,7 +22,10 @@ namespace CallLcds
 
         public string Name => "CallLcds";
 
-        public ExtensionVersion Version => "0.0.0.1";
+        public ExtensionVersion Version => System.Reflection.Assembly.GetExecutingAssembly()
+                                           .GetName()
+                                           .Version
+                                           .ToString();
 
         LolClient client;
 
