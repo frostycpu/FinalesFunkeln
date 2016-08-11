@@ -10,7 +10,7 @@ using Microsoft.Win32.SafeHandles;
 namespace FinalesFunkeln.Util
 {
     [SuppressMessage("ReSharper", "InconsistentNaming")]
-    class ProcessMemory : IDisposable
+    public class ProcessMemory : IDisposable
     {
         public int ProcessId { get; protected set; }
         public IntPtr Handle { get; protected set; }

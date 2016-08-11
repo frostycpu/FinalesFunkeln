@@ -229,7 +229,7 @@ namespace FinalesFunkeln
                     loldir = ProcessHelper.SplitCommandLineArgs((string)retObject["CommandLine"])[2];
 #elif LCU
                 loldir = Path.GetDirectoryName(e.MainModule.FileName) ?? string.Empty;
-                loldir = Path.Combine(loldir, @"../../../../lol_air_client/releases/0.0.4.129/deploy");
+                loldir = Path.Combine(loldir, @"../../../../lol_air_client/releases/0.0.4.147/deploy");
                 //TODO this directory is just a placeholder
 #else
                 loldir = Path.GetDirectoryName(e.MainModule.FileName) ?? string.Empty;
@@ -270,7 +270,7 @@ namespace FinalesFunkeln
             }
 
             InitProxy();
-            _lolClient = new LolClient(loldir, _lolProperties, _proxy,_extensionManager);
+            _lolClient = new LolClient(loldir, _lolProperties, _proxy,e, _extensionManager);
             _extensionManager.FireLolClientInjectedEvent(_lolClient);
             try
             {
@@ -293,8 +293,11 @@ namespace FinalesFunkeln
         {
             if (_certificate == null)
                 return;
-
+#if !LCU
             _proxy = new LolProxy(new IPEndPoint(IPAddress.Loopback, RtmpPort), new Uri(string.Format("rtmps://{0}:{1}", _rtmpAddress, RtmpPort)), _serializationContext, _certificate);
+#else
+            _proxy = new LolProxy(new IPEndPoint(IPAddress.Loopback, RtmpPort), new Uri(string.Format("rtmps://{0}:{1}", _rtmpAddress, RtmpPort)), _serializationContext,_certificate);
+#endif
 
             _proxy.AcknowledgeMessageReceived += OnAckMessageReceived;
             _proxy.AsyncMessageReceived += OnAsyncMessageReceived;

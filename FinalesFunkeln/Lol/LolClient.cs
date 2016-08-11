@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,8 @@ namespace FinalesFunkeln.Lol
     {
         const string GameDataFile="assets/data/gameStats/gameStats_en_US.sqlite";
 
+        public Process Process { get; }
+
         public LolClientImages Images { get; private set; }
 
         public LolClientGameData GameData { get; private set; }
@@ -22,7 +25,7 @@ namespace FinalesFunkeln.Lol
 
         public ExtensionManager ExtensionManager { get; }
         
-        internal LolClient(string directory, PropertiesFile properties, LolProxy proxy, ExtensionManager extManager)
+        internal LolClient(string directory, PropertiesFile properties, LolProxy proxy, Process process, ExtensionManager extManager)
         {
             if (proxy == null)
                 throw new ArgumentNullException("proxy");
@@ -31,6 +34,7 @@ namespace FinalesFunkeln.Lol
             GameData = new LolClientGameData(Path.Combine(directory, GameDataFile));
             Images = new LolClientImages(directory, GameData);
             Connection=new LolConnection(proxy, extManager);
+            Process = process;
             Properties = properties;
             ExtensionManager=extManager;
         }
