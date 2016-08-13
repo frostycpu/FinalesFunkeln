@@ -321,33 +321,73 @@ namespace FinalesFunkeln
 
         void OnRemotingMessageReceived(object sender, RemotingMessageReceivedEventArgs args)
         {
-            RemoteProcedureCallEventArgs rpc = new RemoteProcedureCallEventArgs(args.Destination, args.Operation, (dynamic)args.Message.Body);
-            _extensionManager.FireRemoteProcedureCallEvent(rpc);
-            args.Message.Body = rpc.Parameters;
+            try
+            {
+                RemoteProcedureCallEventArgs rpc = new RemoteProcedureCallEventArgs(args.Destination, args.Operation, (dynamic) args.Message.Body);
+                _extensionManager.FireRemoteProcedureCallEvent(rpc);
+                args.Message.Body = rpc.Parameters;
+            }
+            catch (Exception ex)
+            {
+                _extensionManager.ConsoleWriteLine($"[{(ex.TargetSite.DeclaringType as IExtension)?.Name ?? ex.TargetSite.DeclaringType.FullName}] threw {ex.GetType().FullName} during RPC");
+                _extensionManager.ConsoleWriteLine(" --- Stacktrace --- ");
+                _extensionManager.ConsoleWriteLine(ex.StackTrace);
+                _extensionManager.ConsoleWriteLine(" --- Stacktrace end --- ");
+            }
         }
 
 
         void OnErrorMessageReceived(object sender, RemotingMessageReceivedEventArgs args)
         {
-            RemoteProcedureCallResponseEventArgs rpc = new RemoteProcedureCallResponseEventArgs(args.Destination, args.Operation, (dynamic[])args.Message.Body, args.Error == null ? null : args.Error.RootCause);
-            _extensionManager.FireErrorMessageReceivedEvent(rpc);
-            if (args.Error != null)
-                args.Error.RootCause = rpc.ResponseBody;
+            try
+            {
+                RemoteProcedureCallResponseEventArgs rpc = new RemoteProcedureCallResponseEventArgs(args.Destination, args.Operation, (dynamic[]) args.Message.Body, args.Error == null ? null : args.Error.RootCause);
+                _extensionManager.FireErrorMessageReceivedEvent(rpc);
+                if (args.Error != null)
+                    args.Error.RootCause = rpc.ResponseBody;
+            }
+            catch (Exception ex)
+            {
+                _extensionManager.ConsoleWriteLine($"[{(ex.TargetSite.DeclaringType as IExtension)?.Name ?? ex.TargetSite.DeclaringType.FullName}] threw {ex.GetType().FullName} on error");
+                _extensionManager.ConsoleWriteLine(" --- Stacktrace --- ");
+                _extensionManager.ConsoleWriteLine(ex.StackTrace);
+                _extensionManager.ConsoleWriteLine(" --- Stacktrace end --- ");
+            }
         }
 
         void OnAsyncMessageReceived(object sender, MessageReceivedEventArgs args)
         {
-            AsyncMessageEventArgs rpcr = new AsyncMessageEventArgs(args.Message.Body);
-            _extensionManager.FireAsyncMessageReceivedEvent(rpcr);
-            //args.Result.Body = rpcr.Body;
-            args.Message.Body = rpcr.Body;
+            try
+            {
+                AsyncMessageEventArgs rpcr = new AsyncMessageEventArgs(args.Message.Body);
+                _extensionManager.FireAsyncMessageReceivedEvent(rpcr);
+                //args.Result.Body = rpcr.Body;
+                args.Message.Body = rpcr.Body;
+            }
+            catch (Exception ex)
+            {
+                _extensionManager.ConsoleWriteLine($"[{(ex.TargetSite.DeclaringType as IExtension)?.Name ?? ex.TargetSite.DeclaringType.FullName}] threw {ex.GetType().FullName} on async message");
+                _extensionManager.ConsoleWriteLine(" --- Stacktrace --- ");
+                _extensionManager.ConsoleWriteLine(ex.StackTrace);
+                _extensionManager.ConsoleWriteLine(" --- Stacktrace end --- ");
+            }
         }
 
         void OnAckMessageReceived(object sender, RemotingMessageReceivedEventArgs args)
         {
-            RemoteProcedureCallResponseEventArgs rpc = new RemoteProcedureCallResponseEventArgs(args.Destination, args.Operation, (dynamic)args.Message.Body, args.Result.Body);
-            _extensionManager.FireAcknowledgeMessageReceivedEvent(rpc);
-            args.Result.Body = rpc.ResponseBody;
+            try
+            {
+                RemoteProcedureCallResponseEventArgs rpc = new RemoteProcedureCallResponseEventArgs(args.Destination, args.Operation, (dynamic) args.Message.Body, args.Result.Body);
+                _extensionManager.FireAcknowledgeMessageReceivedEvent(rpc);
+                args.Result.Body = rpc.ResponseBody;
+            }
+            catch (Exception ex)
+            {
+                _extensionManager.ConsoleWriteLine($"[{(ex.TargetSite.DeclaringType as IExtension)?.Name?? ex.TargetSite.DeclaringType.FullName}] threw {ex.GetType().FullName} on acknowledge");
+                _extensionManager.ConsoleWriteLine(" --- Stacktrace --- ");
+                _extensionManager.ConsoleWriteLine(ex.StackTrace);
+                _extensionManager.ConsoleWriteLine(" --- Stacktrace end --- ");
+            }
         }
 
         void pi_Injected(object sender, EventArgs e)
