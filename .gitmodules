@@ -1,0 +1,3 @@
+[submodule "lib/rtmp-sharp"]
+	path = lib/rtmp-sharp
+	url = https://github.com/frostycpu/rtmp-sharp.git
