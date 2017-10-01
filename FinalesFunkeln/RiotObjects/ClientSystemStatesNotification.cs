@@ -8,7 +8,7 @@ using RtmpSharp.IO;
 namespace FinalesFunkeln.RiotObjects
 {
     [Serializable]
-    [SerializedName("com.riotgames.platform.systemstate.ClientSystemStatesNotification")]
+    //[SerializedName("com.riotgames.platform.systemstate.ClientSystemStatesNotification")]
     public class ClientSystemStatesNotification : ExternalizableJsonObject
     {
         public ClientSystemStatesNotification():base("com.riotgames.platform.systemstate.ClientSystemStatesNotification") { }

@@ -40,7 +40,9 @@ namespace FinalesFunkeln
         const string InternalConfigDir = "config/internal/";
         const string LayoutConfigFilename = "Layout.cbf";
         const string DefaultLayoutDefinition = "FinalesFunkeln.Resources.Config.Layout.cbf";
-        const string LolPropertiesFilename = "lol.properties";
+        const string LolPropertiesFilename = "system.yaml";
+        const string LcuSettingsFilename = "LeagueClientSettings.yaml";
+        const string LcuSettingsPath = "../../../../../../Config/";
         const string CertFileName = "data/certs/{0}.p12";
         const int RtmpPort = 2099;
 
@@ -51,7 +53,8 @@ namespace FinalesFunkeln
         string _rtmpAddress;
         X509Certificate2 _certificate;
         ExtensionManager _extensionManager;
-        PropertiesFile _lolProperties;
+        YamlFile _lolProperties;
+        YamlFile _lcuSettings;
         Process _lolClientProcess;
         LolClient _lolClient;
 
@@ -69,12 +72,13 @@ namespace FinalesFunkeln
         {
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
-            if (!Directory.Exists("data") || !File.Exists("sqlite3.dll"))
+            
+            if (!Directory.Exists("data"))
             {
                 MessageBox.Show(Debugger.IsAttached ? @"""data"" folder and/or sqlite3.dll not found. Make sure to copy the data folder and sqlite3.dll to the output directory." : "Some files are missing, please reinstall.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 Environment.Exit(-1);
             }
-
+            
             if (!Debugger.IsAttached)
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             _uiManager = new UiManager();
@@ -212,28 +216,12 @@ namespace FinalesFunkeln
         {
             ProcessInjector pi = sender as ProcessInjector;
             if (pi == null) return;
-
-#if !LCU    //The new lol client has a separate process for the UI
-            //sometimes it takes a while for the main module to be loaded...
-            while (e.MainWindowHandle == IntPtr.Zero)
-#endif
+            
             Thread.Sleep(1000);
             string loldir = null;
             try
             {
-#if AIRDEBUG && DEBUG
-                string wmiQuery = string.Format("select CommandLine from Win32_Process where Name='{0}'", "adl.exe");
-                ManagementObjectSearcher searcher = new ManagementObjectSearcher(wmiQuery);
-                ManagementObjectCollection retObjectCollection = searcher.Get();
-                foreach (ManagementObject retObject in retObjectCollection)
-                    loldir = ProcessHelper.SplitCommandLineArgs((string)retObject["CommandLine"])[2];
-#elif LCU
                 loldir = Path.GetDirectoryName(e.MainModule.FileName) ?? string.Empty;
-                loldir = Path.Combine(loldir, @"../../../../lol_air_client/releases/0.0.4.147/deploy");
-                //TODO this directory is just a placeholder
-#else
-                loldir = Path.GetDirectoryName(e.MainModule.FileName) ?? string.Empty;
-#endif
             }
             catch (Win32Exception)
             {
@@ -241,9 +229,11 @@ namespace FinalesFunkeln
                 return;
 
             }
-            _lolProperties = new PropertiesFile(Path.Combine(loldir, LolPropertiesFilename));
-            var host = _lolProperties["host"];
-            _rtmpAddress = host.Contains(",") ? host.Substring(0, host.IndexOf(',')) : host;
+
+            _lolProperties = new YamlFile(Path.Combine(loldir, LolPropertiesFilename));
+            _lcuSettings = new YamlFile(Path.Combine(loldir, LcuSettingsPath, LcuSettingsFilename));
+            //string host = ((dynamic)_lolProperties)["region_data"][((dynamic)_lcuSettings)["install"]["globals"]["region"]]["servers"]["lcds"]["lcds_host"];
+            _rtmpAddress = ((dynamic)_lolProperties)["region_data"][((dynamic)_lcuSettings)["install"]["globals"]["region"]]["servers"]["lcds"]["lcds_host"];
 
             if (_rtmpAddress == null) return;
 
@@ -296,7 +286,10 @@ namespace FinalesFunkeln
 #if !LCU
             _proxy = new LolProxy(new IPEndPoint(IPAddress.Loopback, RtmpPort), new Uri(string.Format("rtmps://{0}:{1}", _rtmpAddress, RtmpPort)), _serializationContext, _certificate);
 #else
-            _proxy = new LolProxy(new IPEndPoint(IPAddress.Loopback, RtmpPort), new Uri(string.Format("rtmps://{0}:{1}", _rtmpAddress, RtmpPort)), _serializationContext,_certificate);
+            //CEF does not allow self-signed certs so we have to disable TLS for the new client 
+            //(locally only, TLS will still be used to communicate with the actual server)
+            //TLS can be disabled for the client in <clientdeploypath>/system.yaml
+            _proxy = new LolProxy(new IPEndPoint(IPAddress.Loopback, RtmpPort), new Uri(string.Format("rtmps://{0}:{1}", _rtmpAddress, RtmpPort)), _serializationContext);
 #endif
 
             _proxy.AcknowledgeMessageReceived += OnAckMessageReceived;
@@ -394,7 +387,7 @@ namespace FinalesFunkeln
         {
             Dispatcher.Invoke(DispatcherPriority.Input, new ThreadStart(() =>
             {
-                Title = "Finales Funkeln - Injected [" + _lolProperties["platformId"] + "]";
+                Title = "Finales Funkeln - Injected [" + ((dynamic)_lcuSettings)["install"]["globals"]["region"] + "]";
             }));
         }
 

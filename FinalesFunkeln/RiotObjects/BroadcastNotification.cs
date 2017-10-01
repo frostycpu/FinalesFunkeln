@@ -8,7 +8,7 @@ using RtmpSharp.IO;
 namespace FinalesFunkeln.RiotObjects
 {
     [Serializable]
-    [SerializedName("com.riotgames.platform.broadcast.BroadcastNotification")]
+    //[SerializedName("com.riotgames.platform.broadcast.BroadcastNotification")]
     public class BroadcastNotification : ExternalizableJsonObject
     {
         public BroadcastNotification():base("com.riotgames.platform.broadcast.BroadcastNotification") { }

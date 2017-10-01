@@ -13,9 +13,14 @@ namespace FinalesFunkeln.Util
 {
     class ProcessInjector:IDisposable
     {
-        readonly byte[] _connectCc = 
-		{
-			0x55,										//PUSH EBP
+#if LCU
+        const string CONNECT_FUNCTION = "WSAConnect";
+#else
+        const string CONNECT_FUNCTION = "connect";
+#endif
+        readonly byte[] _connectCc =
+        {
+            0x55,										//PUSH EBP
 			0x8B, 0xEC,									//MOV EBP, ESP
 			0x60, 										//PUSHAD
 			0x8B, 0x45, 0x0C, 							//MOV EAX, [EBP+C]
@@ -117,7 +122,7 @@ namespace FinalesFunkeln.Util
                         int jmpaddrloc = connect.Length - 4;
 
                         var mod = ProcessMemory.GetModule("ws2_32.dll");
-                        Int32 reladdr = notemem.GetAddress(mod, "connect");
+                        Int32 reladdr = notemem.GetAddress(mod, CONNECT_FUNCTION);
                         reladdr -= mod;
 
                         var lolmod = GetModuleAddress(CurrentProcess, mem, "ws2_32.dll");

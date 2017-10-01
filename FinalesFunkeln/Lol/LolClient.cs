@@ -20,19 +20,19 @@ namespace FinalesFunkeln.Lol
 
         public LolClientGameData GameData { get; private set; }
 
-        public PropertiesFile Properties { get; private set; }
+        public YamlFile Properties { get; private set; }
         public LolConnection Connection { get; private set; }
 
         public ExtensionManager ExtensionManager { get; }
         
-        internal LolClient(string directory, PropertiesFile properties, LolProxy proxy, Process process, ExtensionManager extManager)
+        internal LolClient(string directory, YamlFile properties, LolProxy proxy, Process process, ExtensionManager extManager)
         {
             if (proxy == null)
                 throw new ArgumentNullException("proxy");
             if(!Directory.Exists(directory))
                 throw new ArgumentException("directory");
-            GameData = new LolClientGameData(Path.Combine(directory, GameDataFile));
-            Images = new LolClientImages(directory, GameData);
+            //GameData = new LolClientGameData(Path.Combine(directory, GameDataFile));
+            //Images = new LolClientImages(directory, GameData);
             Connection=new LolConnection(proxy, extManager);
             Process = process;
             Properties = properties;
